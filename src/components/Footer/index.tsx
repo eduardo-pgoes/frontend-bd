@@ -1,3 +1,5 @@
+"use client";
+
 import { Heart } from "lucide-react";
 import { FlipWords } from "../ui/flip-words";
 

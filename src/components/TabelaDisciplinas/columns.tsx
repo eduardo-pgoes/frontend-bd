@@ -1,4 +1,5 @@
 import { ColumnDef } from "@tanstack/react-table";
+import AcoesDisciplina from "../AcoesDisciplinas";
 
 export type Disciplina = {
   CodigoDisciplina: number,
@@ -50,5 +51,10 @@ export const columns: ColumnDef<Disciplina>[] = [
   {
     accessorKey: 'CodigoCurso',
     header: 'Código do Curso',
+  },
+  {
+    id: "actions",
+    header: "Ações",
+    cell: (cellCtx) => <AcoesDisciplina row={cellCtx.row.original} />,
   },
 ]

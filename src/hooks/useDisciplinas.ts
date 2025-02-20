@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query"
 import axios from 'axios';
 
 const fetchDisciplina = (id: number) => axios.get(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/disciplinas/${id}`).then((val) => val.data);
+const fetchDisciplinas = () => axios.get(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/disciplinas/`).then((val) => val.data);
 
 /**
  * Hook para exportar operações com o servidor (criar disciplinas, editar disciplinas, listar todas as disciplinas e pegar detalhes de
@@ -15,7 +16,13 @@ export const useDisciplinas = () => {
     queryFn: () => fetchDisciplina(id),
   });
 
+  const useGetDisciplinas = () => useQuery({
+    queryKey: ['disciplinas'],
+    queryFn: fetchDisciplinas,
+  });
+
   return {
     useGetDisciplina,
+    useGetDisciplinas,
   };
 }

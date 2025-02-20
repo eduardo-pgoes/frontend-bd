@@ -1,14 +1,64 @@
 "use client";
 
 import { useDisciplinas } from "@/hooks/useDisciplinas";
+import { columns } from "./columns";
+import { flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
 
 export default function TabelaDisciplinas() {
-  const { useGetDisciplina } = useDisciplinas();
-  const { data, isLoading } = useGetDisciplina(1001);
+  const { useGetDisciplinas } = useDisciplinas();
+  const { data } = useGetDisciplinas();
 
-  console.log(data, isLoading);
-
+  const table = useReactTable({
+    data: data?.response?.disciplinas ?? [],
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+  })
+ 
   return (
-    <p>Teste...</p>
+    <div className="rounded-md border">
+      <Table>
+        <TableHeader>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <TableRow key={headerGroup.id}>
+              {headerGroup.headers.map((header) => {
+                return (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
+                )
+              })}
+            </TableRow>
+          ))}
+        </TableHeader>
+        <TableBody>
+          {table.getRowModel().rows?.length ? (
+            table.getRowModel().rows.map((row) => (
+              <TableRow
+                key={row.id}
+                data-state={row.getIsSelected() && "selected"}
+              >
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={columns.length} className="h-24 text-center">
+                Nenhum resultado.
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+    </div>
   );
 }
